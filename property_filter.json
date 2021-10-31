@@ -1,0 +1,11 @@
+{
+	"min_area" : 0,
+	"max_area" : 1000,
+	"min_price" : 0,
+	"max_price" : 1000000,
+	"intermediate_floor" : 0,
+	"min_rooms" : 0,
+	"min_balconies" : 0,
+	"need_box" : 0,
+	"need_elevator" : 0
+}
