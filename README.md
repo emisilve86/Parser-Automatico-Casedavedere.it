@@ -40,12 +40,12 @@ Ad ogni modo, per utilizzare i servizi offerti tramite API Google, è necessario
 
 Una volta completati i passi descritti nei due link riportati sopra, sarà possibile scaricare un file `credential.json` che deve essere inserito nella stessa directory dove risiede lo *script* `CaseDaVedere.py`.
 
-A questo punto abbiamo tutto, e possiamo procedere con la configurazione vera e propria dell'applicazione. Dobbiamo innanzitutto specificare gli indirizzi ai quali si desidera inviare le email. Per fare questo esiste una lista vuota all'interno dello *script* `CaseDaVedere.py` che deve essere riempita con stringhe contenenti gli indirizzi email
+A questo punto abbiamo tutto, e possiamo procedere con la configurazione vera e propria dell'applicazione. Dobbiamo innanzitutto specificare gli indirizzi di posta ai quali si desidera inviare le email. Per fare questo basta inserire uno o più indirizzi di posta elettronica all'interno del file `email_list.json`, all'interno della lista puntata dalla chiave `"email"`, come mostrato sotto
 
-> ```py
-> recipients_list = [
-> 	'esempio1@serv.it',
-> 	'esempio2@serv.it',
+> ```json
+> "email" : [
+> 	"esempio1@serv.it",
+> 	"esempio2@serv.it",
 > 	...
 > ]
 > ```
@@ -96,7 +96,7 @@ Se si omette il redirezionamento di `stdout` e `stderr` a `/dev/null`, lo *scrip
 
 Su sistemi Linux-based è normalmente disponibile il servizio *cron* che altro non è che uno *scheduler* di *cron-jobs*. Questi ultimi possono essere un qualsivoglia eseguibile o *script* da lanciare ad intervalli di tempo ben definiti ed in accordo a determinate regole che possono essere specificate con la sintassi *cron*.
 
-Se per esempio si vuole lanciare lo script ogni ora tra le 8:00 e le 20:00 nei soli giorni della settimana che vanno da lunedì a venerdì, è sufficiente eseguire da terminale `crontab -e` per aprire l'editor ed inserire in fondo la regola che segue
+Se per esempio si vuole lanciare lo *script* ogni ora tra le 8:00 e le 20:00 nei soli giorni della settimana che vanno da lunedì a venerdì, è sufficiente eseguire da terminale `crontab -e` per aprire l'editor ed inserire in fondo la regola che segue
 
 > ```sh
 > 0 8-20 * * 1-5  cd /path/to/the/folder/containing/the/script  &&  python CaseDaVedere.py > /dev/null 2>&1

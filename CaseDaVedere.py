@@ -69,13 +69,6 @@ property_list = []
 new_property_list = []
 
 
-##########################################################
-# LISTA DI INDIRIZZI EMAIL AI QUALI INVIARE LE NOTIFICHE #
-##########################################################
-
-recipients_list = [ ]
-
-
 #################################
 # CARATTERISTICHE DELL'IMMOBILE #
 #################################
@@ -407,6 +400,20 @@ def get_provinces_and_municipalities():
 	return provinces_and_municipalities
 
 
+#################################################
+# FUNZIONI DI GESTIONE DEGLI INDIRIZZI DI POSTA #
+#################################################
+
+def get_email_list():
+	email_list = []
+	if os.path.isfile('email_list.json'):
+		with open('email_list.json', 'r') as file:
+			data = json.load(file)
+			for email in data['email']:
+				email_list.append(email)
+	return email_list
+
+
 ###################################
 # FUNZIONI DI GESTIONE DEL FILTRO #
 ###################################
@@ -520,10 +527,10 @@ def get_gmail_auth_token():
 	return credentials
 
 
-def create_gmail_html(sender, subject, text):
+def create_gmail_html(sender, recipients, subject, text):
 	message = MIMEText(text, 'html')
-	message['to'] = recipients_list[0]
-	for recipient in recipients_list[1:]:
+	message['to'] = recipients[0]
+	for recipient in recipients[1:]:
 		message['to'] += ',' + recipient
 	message['from'] = sender
 	message['subject'] = subject
@@ -552,16 +559,19 @@ def check_new_properties():
 				file.write('\n')
 		for code in new_code_set.difference(old_code_set):
 			new_property_list.append(property_dict[code])
-	if new_property_list and recipients_list:
-		gmail_credentials = get_gmail_auth_token()
-		gmail_service = build('gmail', 'v1', credentials=gmail_credentials)
-		gmail_address = gmail_service.users().getProfile(userId='me').execute()['emailAddress']
-		gmail_message = create_gmail_html(
- 			gmail_address,
- 			'CaseDaVedere',
- 			create_html_string(),
-		)
-		self_send_gmail(gmail_service, gmail_credentials, gmail_message)
+	if new_property_list:
+		email_list = get_email_list()
+		if email_list:
+			gmail_credentials = get_gmail_auth_token()
+			gmail_service = build('gmail', 'v1', credentials=gmail_credentials)
+			gmail_address = gmail_service.users().getProfile(userId='me').execute()['emailAddress']
+			gmail_message = create_gmail_html(
+	 			gmail_address,
+	 			email_list,
+	 			'CaseDaVedere',
+	 			create_html_string(),
+			)
+			self_send_gmail(gmail_service, gmail_credentials, gmail_message)
 
 
 ############################
